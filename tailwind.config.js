@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
+    "./node_modules/flowbite/**/*.{js,ts}",
     "./components/**/*.{js,vue,ts}",
     "./composition/**/*.{js,vue,ts}",
     "./layouts/**/*.vue",
@@ -18,5 +19,5 @@ export default {
       secondary: ["Rethink Sans", "sans-serif"],
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

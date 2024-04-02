@@ -1,3 +1,8 @@
+<script setup>
+const email = ref("");
+const password = ref("");
+const remember_me = ref(false);
+</script>
 <template>
   <div
     class="flex flex-col gap-6 justify-center bg-white rounded-md p-5 py-10 w-[25%]"
@@ -9,6 +14,7 @@
       <div class="flex flex-col gap-2">
         <label for="email">Email</label>
         <input
+          v-model="email"
           type="text"
           id="email"
           class="flex h-12 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-zinc-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -17,13 +23,14 @@
       <div class="flex flex-col gap-2">
         <label for="password">Password</label>
         <input
+          v-model="password"
           type="password"
           id="password"
           class="flex h-12 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-zinc-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         />
         <div class="flex items-center justify-between">
           <div class="flex gap-4">
-            <input id="remember_me" type="checkbox" />
+            <input v-model="remember_me" id="remember_me" type="checkbox" />
             <label for="remember_me" class="cursor-pointer">Remember me</label>
           </div>
           <div>
