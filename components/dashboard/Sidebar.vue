@@ -2,19 +2,19 @@
 // import {} from 'heroicons'
 import { PlusIcon, MinusIcon } from "@heroicons/vue/24/outline";
 import Modal from "@/components/modal/Modal.vue";
-import { initFlowbite } from 'flowbite'
+import { initFlowbite } from "flowbite";
 
 onMounted(() => {
-  initFlowbite()
-})
+  initFlowbite();
+});
 </script>
 <template>
   <div class="w-[300px] bg-gray-100 pt-10 pl-5">
     <div class="flex justify-between items-center pr-3">
       <span class="font-semibold">Access devices</span>
       <button
-        data-modal-target="default-modal"
-        data-modal-toggle="default-modal"
+        data-modal-target="add-device-modal"
+        data-modal-toggle="add-device-modal"
         type="button"
         class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
       >
@@ -23,13 +23,16 @@ onMounted(() => {
     </div>
 
     <!-- Add Device Modal -->
-    <Modal title="Add a device" id="default-modal">
+    <Modal title="Add a device" id="add-device-modal">
       <p>Hello, this is for adding of devices</p>
     </Modal>
+
     <div class="flex flex-col mt-5 gap-4 pt-5 pr-3">
       <div class="flex justify-between items-center">
         <span>Device - 2056</span>
         <button
+          data-modal-target="remove-device-modal"
+          data-modal-toggle="remove-device-modal"
           type="button"
           class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
         >
@@ -39,12 +42,19 @@ onMounted(() => {
       <div class="flex justify-between items-center">
         <span>Device - 2036</span>
         <button
+          data-modal-target="remove-device-modal"
+          data-modal-toggle="remove-device-modal"
           type="button"
           class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
         >
           <MinusIcon class="h-5 w-5 text-gray-900" />
         </button>
       </div>
+
+      <!-- Remove Device Modal -->
+      <Modal title="Remove a device" id="remove-device-modal">
+        <p>Hello, this is for removing of devices</p>
+      </Modal>
     </div>
   </div>
 </template>

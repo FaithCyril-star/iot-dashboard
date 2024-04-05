@@ -7,7 +7,7 @@ services:
     command:
       npm run dev -o
     ports:
-      - "${FORWARD_APP_PORT:-3001}:3000"
+      - "${FORWARD_APP_PORT:-3004}:3000"
     volumes:
       - type: bind
         source: .

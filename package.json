@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
     "@nuxtjs/axios": "^5.13.6",
+    "@popperjs/core": "^2.11.8",
     "@tanstack/vue-table": "^8.10.7",
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.8",
@@ -22,8 +23,10 @@
     "lucide-vue-next": "^0.292.0",
     "nuxt": "^3.10.1",
     "tailwind-merge": "^2.0.0",
+    "v-calendar": "^3.1.2",
     "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vue3-apexcharts": "^1.5.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",
