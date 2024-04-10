@@ -13,7 +13,6 @@ const range = ref({
   end: new Date(2024, 0, 12),
 });
 
-
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
@@ -80,8 +79,40 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="w-full h-full">
+    <div class="flex flex-col gap-10 w-full h-full">
       <BarChart></BarChart>
+      <div class="flex items-center gap-10">
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Heart Rate</label
+          >
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Oxygen Rate</label
+          >
+        </div>
+        <div class="flex gap-2 items-center">
+          <input
+            type="checkbox"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label
+            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Blood Pressure</label
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>
