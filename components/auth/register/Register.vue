@@ -8,19 +8,8 @@ const password = ref("");
 const confirm_password = ref("");
 
 async function signup() {
-  // const _res = await axios.post("http://localhost:8081/signup/register-user", {
-  //   headers: {
-  //     "Access-Control-Allow-Origin": "*",
-  //     "Access-Control-Allow-Headers": "*",
-  //   },
-  //   body: {
-  //     username: "Fred",
-  //     password: "1234",
-  //     email: "fkaaziebu1998@gmail.com",
-  //     phoneNumber: "0550815604",
-  //     deviceId: "1234",
-  //   },
-  // });
+  // const res = await $axios.$post('/signup/register-user')
+  // console.log(res)
 }
 </script>
 <template>
