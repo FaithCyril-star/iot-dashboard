@@ -6,10 +6,14 @@ import { initFlowbite } from "flowbite";
 import axios from "axios";
 
 // states
-const deviceId= ref("");
-const deviceIds = ref([]);
+const deviceId = ref("");
+const deviceIds = ref([
+  {
+    device_id: "123",
+  },
+]);
 
-async function addDevice(){
+async function addDevice() {
   try {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -21,82 +25,85 @@ async function addDevice(){
         deviceId: deviceId.value,
       },
       {
-      headers: { Authorization: `Bearer ${token}` }
-      },
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     deviceId.value = "";
+  } catch (err) {
+    console.log(err);
   }
-    catch(err){
-      console.log(err);
-    }
-  }
+}
 
-
-async function removeDevice(){
+async function removeDevice() {
   try {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    
+
     const res = await axios.delete(
       `https://rpmsbackend.azurewebsites.net/remove-device?userid=${parseInt(userId)}&deviceid=${deviceId.value}`,
       {
-      headers: { Authorization: `Bearer ${token}` }
-      },
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     deviceId.value = "";
+  } catch (err) {
+    console.log(err);
   }
-    catch(err){
-      console.log(err);
-    }
 }
 
-
-async function getDeviceIds(){
+async function getDeviceIds() {
   try {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    
+
     const res = await axios.get(
       `https://rpmsbackend.azurewebsites.net/device-ids?userid=${parseInt(userId)}`,
       {
-      headers: { Authorization: `Bearer ${token}` }
-      },
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     deviceIds.value = res.data.ids;
-    console.log(deviceIds.value);
+  } catch (err) {
+    console.log(err);
   }
-    catch(err){
-      console.log(err);
-    }
 }
 
-
 onMounted(() => {
-  initFlowbite();
   getDeviceIds();
+  initFlowbite();
 });
 </script>
 <template>
   <div class="w-[300px] bg-gray-100 pt-10 pl-5">
     <div class="flex justify-between items-center pr-3">
       <span class="font-semibold">Access devices</span>
-      <button
-        data-modal-target="add-device-modal"
-        data-modal-toggle="add-device-modal"
-        type="button"
-        class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
-      >
-        <PlusIcon class="h-5 w-5 text-gray-900" />
-      </button>
+      <div class='flex gap-2 items-center'>
+        <button
+          data-modal-target="add-device-modal"
+          data-modal-toggle="add-device-modal"
+          type="button"
+          class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
+        >
+          <PlusIcon class="h-5 w-5 text-gray-900" />
+        </button>
+        <button
+          data-modal-target="remove-device-modal"
+          data-modal-toggle="remove-device-modal"
+          type="button"
+          class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
+        >
+          <MinusIcon class="h-5 w-5 text-gray-900" />
+        </button>
+      </div>
     </div>
 
     <!-- Add Device Modal -->
-    <Modal 
-    title="Add a device" 
-    id="add-device-modal"
-    btn_main="Add Device"
-    btn_minor="Cancel"
-    @modify-device-access="addDevice"
+    <Modal
+      title="Add a device"
+      id="add-device-modal"
+      btn_main="Add Device"
+      btn_minor="Cancel"
+      @modify-device-access="addDevice"
     >
       <div class="flex flex-col gap-3">
         <label for="device_id" class="text-sm font-semibold">Device Id</label>
@@ -114,18 +121,14 @@ onMounted(() => {
         </p>
       </div>
     </Modal>
-    
+
     <div class="flex flex-col mt-5 gap-4 pt-5 pr-3">
-      <div class="flex justify-between items-center" v-for="id in deviceIds" :key="id">
-        <span>{{ id.device_id }}</span>
-        <button
-          data-modal-target="remove-device-modal"
-          data-modal-toggle="remove-device-modal"
-          type="button"
-          class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
-        >
-          <MinusIcon class="h-5 w-5 text-gray-900" />
-        </button>
+      <div
+        v-for="device in deviceIds"
+        :key="device"
+        class="flex justify-between items-center"
+      >
+        <span>{{ device.device_id }}</span>
       </div>
 
       <!-- Remove Device Modal -->

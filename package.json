@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "flowbite": "^2.3.0",
+    "flowbite-vue": "^0.1.3",
     "heroicons": "^2.1.3",
     "lucide-vue-next": "^0.292.0",
     "nuxt": "^3.10.1",
