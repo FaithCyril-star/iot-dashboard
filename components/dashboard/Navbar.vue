@@ -18,7 +18,7 @@ onMounted(() => {
     </div>
     <div>
       <img
-        src="https://eu.ui-avatars.com/api/?background=random&name=Frederick+Aziebu"
+        :src="`https://eu.ui-avatars.com/api/?background=random&name=${username}`"
         class="h-8 w-8 rounded-full"
       />
     </div>
