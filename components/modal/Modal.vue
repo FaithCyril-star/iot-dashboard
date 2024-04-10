@@ -19,8 +19,11 @@ defineProps({
   btn_minor: {
     type: String,
     default: "decline",
-  },
+  }
 });
+defineEmits([
+  "modifyDeviceAccess"
+])
 </script>
 <template>
   <div
@@ -78,6 +81,7 @@ defineProps({
                 ? 'text-white bg-gray-700 hover:bg-gray-800'
                 : 'text-white bg-red-700 hover:bg-red-800',
             ]"
+            @click="$emit('modifyDeviceAccess')"
           >
             {{ btn_main }}
           </button>

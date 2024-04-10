@@ -3,9 +3,77 @@
 import { PlusIcon, MinusIcon } from "@heroicons/vue/24/outline";
 import Modal from "@/components/modal/Modal.vue";
 import { initFlowbite } from "flowbite";
+import axios from "axios";
+
+// states
+const deviceId= ref("");
+const deviceIds = ref([]);
+
+async function addDevice(){
+  try {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+
+    const res = await axios.post(
+      "https://rpmsbackend.azurewebsites.net/add-device",
+      {
+        userId: parseInt(userId),
+        deviceId: deviceId.value,
+      },
+      {
+      headers: { Authorization: `Bearer ${token}` }
+      },
+    );
+    deviceId.value = "";
+  }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+
+async function removeDevice(){
+  try {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    
+    const res = await axios.delete(
+      `https://rpmsbackend.azurewebsites.net/remove-device?userid=${parseInt(userId)}&deviceid=${deviceId.value}`,
+      {
+      headers: { Authorization: `Bearer ${token}` }
+      },
+    );
+    deviceId.value = "";
+  }
+    catch(err){
+      console.log(err);
+    }
+}
+
+
+async function getDeviceIds(){
+  try {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    
+    const res = await axios.get(
+      `https://rpmsbackend.azurewebsites.net/device-ids?userid=${parseInt(userId)}`,
+      {
+      headers: { Authorization: `Bearer ${token}` }
+      },
+    );
+    deviceIds.value = res.data.ids;
+    console.log(deviceIds.value);
+  }
+    catch(err){
+      console.log(err);
+    }
+}
+
 
 onMounted(() => {
   initFlowbite();
+  getDeviceIds();
 });
 </script>
 <template>
@@ -23,15 +91,19 @@ onMounted(() => {
     </div>
 
     <!-- Add Device Modal -->
-    <Modal title="Add a device" id="add-device-modal"
+    <Modal 
+    title="Add a device" 
+    id="add-device-modal"
     btn_main="Add Device"
-        btn_minor="Cancel"
+    btn_minor="Cancel"
+    @modify-device-access="addDevice"
     >
       <div class="flex flex-col gap-3">
         <label for="device_id" class="text-sm font-semibold">Device Id</label>
         <input
           type="text"
           id="device_id"
+          v-model="deviceId"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Example: 23456876543222"
           required
@@ -42,21 +114,10 @@ onMounted(() => {
         </p>
       </div>
     </Modal>
-
+    
     <div class="flex flex-col mt-5 gap-4 pt-5 pr-3">
-      <div class="flex justify-between items-center">
-        <span>Device - 2056</span>
-        <button
-          data-modal-target="remove-device-modal"
-          data-modal-toggle="remove-device-modal"
-          type="button"
-          class="p-0.5 bg-white hover:bg-gray-300 border border-gray-600 rounded-lg"
-        >
-          <MinusIcon class="h-5 w-5 text-gray-900" />
-        </button>
-      </div>
-      <div class="flex justify-between items-center">
-        <span>Device - 2036</span>
+      <div class="flex justify-between items-center" v-for="id in deviceIds" :key="id">
+        <span>{{ id.device_id }}</span>
         <button
           data-modal-target="remove-device-modal"
           data-modal-toggle="remove-device-modal"
@@ -74,12 +135,14 @@ onMounted(() => {
         btn_main="Delete"
         btn_minor="Cancel"
         btn_main_color="red"
+        @modify-device-access="removeDevice"
       >
         <div class="flex flex-col gap-3">
           <label for="device_id" class="text-sm font-semibold">Device Id</label>
           <input
             type="text"
             id="device_id"
+            v-model="deviceId"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Example: 23456876543222"
             required
