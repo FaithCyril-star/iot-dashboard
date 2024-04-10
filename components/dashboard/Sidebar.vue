@@ -51,7 +51,6 @@ async function removeDevice() {
   }
 }
 
-
 async function getDeviceIds() {
   try {
     const userId = sessionStorage.getItem("userId");
@@ -78,7 +77,7 @@ onMounted(() => {
   <div class="w-[300px] bg-gray-100 pt-10 pl-5">
     <div class="flex justify-between items-center pr-3">
       <span class="font-semibold">Devices</span>
-      <div class='flex gap-2 items-center'>
+      <div class="flex gap-2 items-center">
         <button
           data-modal-target="add-device-modal"
           data-modal-toggle="add-device-modal"
@@ -124,13 +123,14 @@ onMounted(() => {
     </Modal>
 
     <div class="flex flex-col mt-5 gap-4 pt-5 pr-3">
-      <div
+      <NuxtLink
+        :to="`/dashboard/${device.device_id}`"
         v-for="device in deviceIds"
         :key="device"
         class="flex justify-between items-center"
       >
         <span>{{ device.device_id }}</span>
-      </div>
+      </NuxtLink>
 
       <!-- Remove Device Modal -->
       <Modal
