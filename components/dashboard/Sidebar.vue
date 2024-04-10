@@ -7,11 +7,7 @@ import axios from "axios";
 
 // states
 const deviceId = ref("");
-const deviceIds = ref([
-  {
-    device_id: "123",
-  },
-]);
+const deviceIds = ref([]);
 
 async function addDevice() {
   try {
@@ -28,6 +24,8 @@ async function addDevice() {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+
+    getDeviceIds();
     deviceId.value = "";
   } catch (err) {
     console.log(err);
@@ -45,11 +43,14 @@ async function removeDevice() {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+
+    getDeviceIds();
     deviceId.value = "";
   } catch (err) {
     console.log(err);
   }
 }
+
 
 async function getDeviceIds() {
   try {
@@ -76,7 +77,7 @@ onMounted(() => {
 <template>
   <div class="w-[300px] bg-gray-100 pt-10 pl-5">
     <div class="flex justify-between items-center pr-3">
-      <span class="font-semibold">Access devices</span>
+      <span class="font-semibold">Devices</span>
       <div class='flex gap-2 items-center'>
         <button
           data-modal-target="add-device-modal"
