@@ -1,15 +1,38 @@
 <script setup>
 // import { useSessionStorage } from "@vueuse/core";
-// import axios from "axios";
+import axios from "axios";
 
 // states
 const email = ref("");
+const username = ref("");
+const phone_number = ref("");
+const device_id = ref("");
 const password = ref("");
 const confirm_password = ref("");
 
 async function signup() {
-  // const res = await $axios.$post('/signup/register-user')
-  // console.log(res)
+  // make api call to server
+  try {
+    const res = await axios.post(
+      "https://rpmsbackend.azurewebsites.net/signup/register-user",
+      {
+        email: email.value,
+        username: username.value,
+        phoneNumber: phone_number.value,
+        deviceId: device_id.value,
+        password: password.value,
+      }
+    );
+
+    // store userId in session
+    sessionStorage.setItem("userId", res.data.user_id)
+
+    // Redirect to verification page
+    await navigateTo("/auth/verify");
+  } catch (err) {
+    // Handle errors here
+    console.log(err);
+  }
 }
 </script>
 <template>
@@ -30,6 +53,7 @@ async function signup() {
           <input
             type="email"
             id="email"
+            v-model="email"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="example@email.com"
             required
@@ -44,6 +68,7 @@ async function signup() {
           <input
             type="text"
             id="username"
+            v-model="username"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="John Doe"
             required
@@ -59,6 +84,7 @@ async function signup() {
         <input
           type="text"
           id="phone_number"
+          v-model="phone_number"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="+233244388337"
           required
@@ -73,6 +99,7 @@ async function signup() {
         <input
           type="text"
           id="device_id"
+          v-model="device_id"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="12456787543"
           required
@@ -88,6 +115,7 @@ async function signup() {
           <input
             type="password"
             id="password"
+            v-model="password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="12456787543"
             required
@@ -102,6 +130,7 @@ async function signup() {
           <input
             type="password"
             id="confirm_password"
+            v-model="confirm_password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="12456787543"
             required

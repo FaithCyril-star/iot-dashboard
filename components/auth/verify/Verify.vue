@@ -1,5 +1,26 @@
 <script setup>
+import axios from "axios";
+// import { useSessionStorage } from "@vueuse/core";
+
 const verification_code = ref("");
+
+async function verify() {
+  try {
+    // Get userId from session
+    // const userId = useSessionStorage("userId");
+    const user_id = sessionStorage.getItem("userId");
+
+    const res = axios.post(
+      "https://rpmsbackend.azurewebsites.net/signup/verify-code",
+      {
+        userId: parseInt(user_id),
+        verificationCode: verification_code.value,
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+}
 </script>
 <template>
   <div
@@ -19,6 +40,7 @@ const verification_code = ref("");
           <input
             type="text"
             id="verification_code"
+            v-model="verification_code"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Example: 3403593"
             required
@@ -31,6 +53,7 @@ const verification_code = ref("");
       </div>
       <div class="flex">
         <button
+          @click="verify"
           class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 w-full p-3 text-gray-50 hover:bg-gray-900/90"
         >
           Submit
