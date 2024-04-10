@@ -17,6 +17,9 @@ async function verify() {
         verificationCode: verification_code.value,
       }
     );
+
+    //redirect to login page
+    await navigateTo("/auth/login");
   } catch (err) {
     console.log(err);
   }

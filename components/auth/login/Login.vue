@@ -1,7 +1,31 @@
 <script setup>
+import axios from "axios";
+
+// states
 const email = ref("");
 const password = ref("");
-const remember_me = ref(false);
+
+async function login(){
+  try {
+    const res = await axios.post(
+      "https://rpmsbackend.azurewebsites.net/login",
+      {
+        email: email.value,
+        password: password.value,
+      }
+    );
+    
+    // store user info in session
+    sessionStorage.setItem("userId", res.data.userId);
+    sessionStorage.setItem("username", res.data.username);
+    sessionStorage.setItem("token", res.data.token);
+
+    //redirect to dashboard
+    await navigateTo("/dashboard");
+  } catch (err) {
+    console.log(err);
+  }
+}
 </script>
 <template>
   <div
@@ -20,6 +44,7 @@ const remember_me = ref(false);
         <input
           type="email"
           id="email"
+          v-model="email"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="example@email.com"
           required
@@ -34,6 +59,7 @@ const remember_me = ref(false);
         <input
           type="password"
           id="password"
+          v-model="password"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="****************"
           required
@@ -49,6 +75,7 @@ const remember_me = ref(false);
       <div class="flex">
         <button
           class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 w-full p-3 text-gray-50 hover:bg-gray-900/90"
+          @click="login"
         >
           Sign in
         </button>
