@@ -59,7 +59,7 @@ const chartOptions = ref({
       :series="series"
     />
     <Table v-else
-    :chart-data="props.chartData",
+    :chart-data="props.chartData"
     :timestamps="props.timestamps"
     ></Table>
   </client-only>
