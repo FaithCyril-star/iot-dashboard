@@ -1,11 +1,34 @@
 <script setup>
 import VueApexCharts from "vue3-apexcharts";
 
+const props = defineProps({
+  chartData: {
+    type: Array,
+    default: () => [],
+  }
+});
+console.log(props.chartData);
 const series = ref([
   {
-    name: "IOT Devices",
-    data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+    name: "Temperature",
+    data: props.chartData.map(obj => obj.temperature)
   },
+  {
+    name: "Heart Rate",
+    data: props.chartData.map(obj => obj.heart_rate)
+  },
+  {
+    name: "Oxygen Saturation",
+    data: props.chartData.map(obj => obj.oxygen_saturation)
+  },
+  {
+    name: "Systolic Blood Pressure",
+    data: props.chartData.map(obj => obj.systolic_pressure)
+  },
+  {
+    name: "Diastolic Blood Pressure",
+    data: props.chartData.map(obj => obj.diastolic_pressure)
+  }
 ]);
 
 const chartOptions = ref({
@@ -33,7 +56,7 @@ const chartOptions = ref({
     },
   },
   xaxis: {
-    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+    categories: props.chartData.map(obj => obj.timestamp),
   },
 });
 </script>

@@ -4,18 +4,45 @@ import { ref, onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 import { DatePicker } from "v-calendar";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-
+import { format } from "date-fns";
+import axios from "axios";
 // import TimeSeriesChart from "@/components/dashboard/TimeSeriesChart.vue";
-import BarChart from "@/components/dashboard/BarChart.vue";
+import LineChart from "@/components/dashboard/LineChart.vue";
 
 const range = ref({
-  start: new Date(2024, 0, 7),
-  end: new Date(2024, 0, 12),
+  start: new Date(2024, 3, 4),
+  end: new Date(2024, 3, 4),
 });
+const route = useRoute();
+const deviceId = ref(route.params.deviceid);
+const deviceData = ref([]);
 
+
+async function getDeviceData(){
+  try {
+    const token = sessionStorage.getItem("token");
+    const formattedStartDate = encodeURIComponent(format(range.value.start, 'yyyy/MM/dd'));
+    const formattedEndDate = encodeURIComponent(format(range.value.end, 'yyyy/MM/dd'));
+
+    const res = await axios.get(
+      `https://rpmsbackend.azurewebsites.net/device-data?deviceid=${deviceId.value}&startdate=${formattedStartDate}&enddate=${formattedEndDate}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    deviceData.value = res.data.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+watch(range,()=>getDeviceData())
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
+  getDeviceData();
 });
 </script>
 <template>
@@ -57,7 +84,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex flex-col gap-10 w-full h-full">
-      <BarChart></BarChart>
+      <LineChart :chart-data="deviceData"></LineChart>
       <div class="flex items-center gap-10">
         <div class="flex gap-2 items-center">
           <input
@@ -81,7 +108,7 @@ onMounted(() => {
           <label
             for="oxygen_rate"
             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Oxygen Rate</label
+            >Oxygen Saturation</label
           >
         </div>
         <div class="flex gap-2 items-center">

@@ -3,9 +3,6 @@ import Navbar from "@/components/dashboard/Navbar.vue";
 import Sidebar from "@/components/dashboard/Sidebar.vue";
 import Content from "@/components/dashboard/Content.vue";
 
-const route = useRoute()
-
-console.log(route.params)
 </script>
 <template>
   <div class="w-full h-screen overflow-hidden">
