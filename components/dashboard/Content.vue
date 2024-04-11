@@ -133,6 +133,43 @@ onMounted(() => {
         </DatePicker>
       </div>
     </div>
+
+    <button
+          id="dropdownFormatButton"
+          data-dropdown-toggle="dropdownFormat"
+          class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          type="button"
+        >
+          <div class="flex gap-2 items-center">
+            <span>View Format</span>
+            <ChevronDownIcon class="h-5 w-5" />
+          </div>
+        </button>
+        <div
+          id="dropdownFormat"
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+        >
+          <ul
+            class="py-2 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownFormatButton"
+          >
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Graph</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Table</a
+              >
+            </li>
+          </ul>
+        </div>
+
     <div class="flex flex-col gap-10 w-full h-full">
       <LineChart
         v-if="!is_loading && deviceData.length > 0  && deviceData.every(obj => obj.data.length > 0)"
