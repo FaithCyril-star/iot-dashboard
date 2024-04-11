@@ -6,7 +6,7 @@ import { DatePicker } from "v-calendar";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { format } from "date-fns";
 import axios from "axios";
-// import TimeSeriesChart from "@/components/dashboard/TimeSeriesChart.vue";
+import { formatDate } from "@/utils/formatDate.js";
 import Display from "@/components/dashboard/Display.vue";
 
 const range = ref({
@@ -86,7 +86,7 @@ async function getDeviceData() {
       deviceDataSeries.value.push(diastolicPressureSeries);
     }
 
-    timestamps.value = res.data.data.map((obj) => obj.timestamp);
+    timestamps.value = res.data.data.map((obj) => formatDate(obj.timestamp));
   } catch (err) {
     console.log(err);
   }

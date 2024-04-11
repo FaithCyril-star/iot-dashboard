@@ -1,5 +1,5 @@
 <script setup>
-
+import { formatDate } from "@/utils/formatDate.js";
 const props = defineProps({
   headers:{
     type:Array,
@@ -23,12 +23,6 @@ const ITEMS_PER_PAGE = ref(8);
 const currentPageNumber = ref(1);
 const currentPageData = ref(props.chartData.slice(0, ITEMS_PER_PAGE.value));
 const totalPages = computed(() => Math.ceil(props.chartData.length / ITEMS_PER_PAGE.value));
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-  return date.toLocaleTimeString('en-GB', options);
-}
 
 
 // Function to navigate to the previous page
