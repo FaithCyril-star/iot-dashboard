@@ -7,7 +7,7 @@ import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { format } from "date-fns";
 import axios from "axios";
 // import TimeSeriesChart from "@/components/dashboard/TimeSeriesChart.vue";
-import LineChart from "@/components/dashboard/LineChart.vue";
+import Display from "@/components/dashboard/Display.vue";
 
 const range = ref({
   start: new Date(2024, 3, 4),
@@ -22,6 +22,8 @@ const is_heartRateChecked = ref(false);
 const is_temperatureChecked = ref(true);
 const is_oxygenSaturationChecked = ref(false);
 const is_bloodPressureChecked = ref(false);
+const displayFormat = ref("graph");
+
 
 async function getDeviceData() {
   try {
@@ -81,7 +83,6 @@ async function getDeviceData() {
     }
 
     timestamps.value = res.data.data.map((obj) => obj.timestamp);
-    console.log(deviceData.value);
   } catch (err) {
     console.log(err);
   }
@@ -94,6 +95,7 @@ watch(
     is_heartRateChecked,
     is_temperatureChecked,
     is_oxygenSaturationChecked,
+    displayFormat
   ],
   () => getDeviceData()
 );
@@ -148,26 +150,30 @@ onMounted(() => {
           type="button"
         >
           <div class="flex gap-2 items-center justify-between w-32">
-            <span>View Format</span>
+            <span>Change Format</span>
             <ChevronDownIcon class="h-5 w-5" />
           </div>
         </button>
         <div
           id="dropdownFormat"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+          class="z-30 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
         >
           <ul
             class="py-2 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownFormatButton"
           >
-            <li>
+            <li
+            @click="displayFormat='graph'"
+            >
               <a
                 href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >Graph</a
               >
             </li>
-            <li>
+            <li
+            @click="displayFormat='table'"
+            >
               <a
                 href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -180,7 +186,7 @@ onMounted(() => {
     </div>
 
     <div class="flex flex-col gap-10 w-full h-full">
-      <LineChart
+      <Display
         v-if="
           !is_loading &&
           deviceData.length > 0 &&
@@ -188,7 +194,8 @@ onMounted(() => {
         "
         :chart-data="deviceData"
         :timestamps="timestamps"
-      ></LineChart>
+        :display-option="displayFormat"
+      ></Display>
       <div
         v-else-if="
           !is_loading &&

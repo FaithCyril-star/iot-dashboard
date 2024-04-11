@@ -1,6 +1,6 @@
 <script setup>
 import VueApexCharts from "vue3-apexcharts";
-import { format } from "date-fns";
+import Table from "@/components/dashboard/Table.vue";
 
 const props = defineProps({
   chartData: {
@@ -10,6 +10,10 @@ const props = defineProps({
   timestamps:{
     type: Array,
     default: () => [],
+  },
+  displayOption: {
+    type: String,
+    default: "graph",
   }
 });
 
@@ -48,10 +52,15 @@ const chartOptions = ref({
 <template>
   <client-only>
     <VueApexCharts
+      v-if="props.displayOption === 'graph'"
       type="line"
       height="80%"
       :options="chartOptions"
       :series="series"
     />
+    <Table v-else
+    :chart-data="props.chartData",
+    :timestamps="props.timestamps"
+    ></Table>
   </client-only>
 </template>
