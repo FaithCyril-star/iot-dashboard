@@ -1,34 +1,35 @@
 <script setup>
 import VueApexCharts from "vue3-apexcharts";
+import { format } from "date-fns";
 
 const props = defineProps({
   chartData: {
     type: Array,
     default: () => [],
-  }
+  },
 });
-console.log(props.chartData);
+
 const series = ref([
   {
     name: "Temperature",
-    data: props.chartData.map(obj => obj.temperature)
+    data: props.chartData.map((obj) => obj.temperature),
   },
   {
     name: "Heart Rate",
-    data: props.chartData.map(obj => obj.heart_rate)
+    data: props.chartData.map((obj) => obj.heart_rate),
   },
   {
     name: "Oxygen Saturation",
-    data: props.chartData.map(obj => obj.oxygen_saturation)
+    data: props.chartData.map((obj) => obj.oxygen_saturation),
   },
   {
     name: "Systolic Blood Pressure",
-    data: props.chartData.map(obj => obj.systolic_pressure)
+    data: props.chartData.map((obj) => obj.systolic_pressure),
   },
   {
     name: "Diastolic Blood Pressure",
-    data: props.chartData.map(obj => obj.diastolic_pressure)
-  }
+    data: props.chartData.map((obj) => obj.diastolic_pressure),
+  },
 ]);
 
 const chartOptions = ref({
@@ -56,7 +57,10 @@ const chartOptions = ref({
     },
   },
   xaxis: {
-    categories: props.chartData.map(obj => obj.timestamp),
+    categories: props.chartData.map((obj) => {
+      
+      return obj.timestamp
+    }),
   },
 });
 </script>

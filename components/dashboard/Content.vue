@@ -16,13 +16,18 @@ const range = ref({
 const route = useRoute();
 const deviceId = ref(route.params.deviceid);
 const deviceData = ref([]);
+const is_loading = ref(false)
 
-
-async function getDeviceData(){
+async function getDeviceData() {
   try {
+    is_loading.value = true
     const token = sessionStorage.getItem("token");
-    const formattedStartDate = encodeURIComponent(format(range.value.start, 'yyyy/MM/dd'));
-    const formattedEndDate = encodeURIComponent(format(range.value.end, 'yyyy/MM/dd'));
+    const formattedStartDate = encodeURIComponent(
+      format(range.value.start, "yyyy/MM/dd")
+    );
+    const formattedEndDate = encodeURIComponent(
+      format(range.value.end, "yyyy/MM/dd")
+    );
 
     const res = await axios.get(
       `https://rpmsbackend.azurewebsites.net/device-data?deviceid=${deviceId.value}&startdate=${formattedStartDate}&enddate=${formattedEndDate}`,
@@ -30,15 +35,15 @@ async function getDeviceData(){
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-
+    
+    is_loading.value = false
     deviceData.value = res.data.data;
   } catch (err) {
     console.log(err);
   }
 }
 
-
-watch(range,()=>getDeviceData())
+watch(range, () => getDeviceData());
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
@@ -84,7 +89,11 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex flex-col gap-10 w-full h-full">
-      <LineChart :chart-data="deviceData"></LineChart>
+      <LineChart
+        v-if="!is_loading"
+        :chart-data="deviceData"
+      ></LineChart>
+      <div v-else>No Data Available yet</div>
       <div class="flex items-center gap-10">
         <div class="flex gap-2 items-center">
           <input
