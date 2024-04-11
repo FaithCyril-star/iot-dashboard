@@ -26,6 +26,7 @@ const is_bloodPressureChecked = ref(false);
 const displayFormat = ref("graph");
 
 
+
 async function getDeviceData() {
   try {
     is_loading.value = true;
@@ -112,7 +113,7 @@ onMounted(() => {
   <div class="w-full h-full bg-white p-10 flex flex-col gap-10">
     <div class="w-full flex items-center gap-5 overflow-hidden">
       <div class="flex items-center gap-5 w-full">
-        <DatePicker v-model.range="range" mode="date">
+        <DatePicker v-model.range="range" mode="date" :max-date='new Date()'>
           <template #default="{ inputValue, inputEvents }">
             <div class="flex justify-start items-center gap-4 w-full">
               <div class="flex items-center w-[20%]">
