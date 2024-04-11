@@ -16,6 +16,7 @@ const range = ref({
 const route = useRoute();
 const deviceId = ref(route.params.deviceid);
 const deviceData = ref([]);
+const deviceDataSeries = ref([]);
 const timestamps = ref([]);
 const is_loading = ref(false);
 const is_heartRateChecked = ref(false);
@@ -29,6 +30,7 @@ async function getDeviceData() {
   try {
     is_loading.value = true;
     deviceData.value = [];
+    deviceDataSeries.value = [];
     const token = sessionStorage.getItem("token");
     const formattedStartDate = encodeURIComponent(
       format(range.value.start, "yyyy/MM/dd")
@@ -45,41 +47,42 @@ async function getDeviceData() {
     );
 
     is_loading.value = false;
+    deviceData.value = res.data.data;
     if (is_heartRateChecked.value) {
       const heartRateSeries = {
-        name: "Heart Rate",
+        name: "Heart Rate(bpm)",
         data: res.data.data.map((obj) => obj.heart_rate),
       };
 
-      deviceData.value.push(heartRateSeries);
+      deviceDataSeries.value.push(heartRateSeries);
     }
     if (is_temperatureChecked.value) {
       const temperatureSeries = {
-        name: "Temperature",
+        name: "Temperature(°C)",
         data: res.data.data.map((obj) => obj.temperature),
       };
-      deviceData.value.push(temperatureSeries);
+      deviceDataSeries.value.push(temperatureSeries);
     }
     if (is_oxygenSaturationChecked.value) {
       const oxygenSaturationSeries = {
-        name: "Oxygen Saturation",
+        name: "Oxygen Saturation(%)",
         data: res.data.data.map((obj) => obj.oxygen_saturation),
       };
 
-      deviceData.value.push(oxygenSaturationSeries);
+      deviceDataSeries.value.push(oxygenSaturationSeries);
     }
     if (is_bloodPressureChecked.value) {
       const systolicPressureSeries = {
-        name: "Systolic Blood Pressure",
+        name: "Systolic Blood Pressure(mmHg)",
         data: res.data.data.map((obj) => obj.systolic_pressure),
       };
       const diastolicPressureSeries = {
-        name: "Diastolic Blood Pressure",
+        name: "Diastolic Blood Pressure(mmHg)",
         data: res.data.data.map((obj) => obj.diastolic_pressure),
       };
 
-      deviceData.value.push(systolicPressureSeries);
-      deviceData.value.push(diastolicPressureSeries);
+      deviceDataSeries.value.push(systolicPressureSeries);
+      deviceDataSeries.value.push(diastolicPressureSeries);
     }
 
     timestamps.value = res.data.data.map((obj) => obj.timestamp);
@@ -189,18 +192,19 @@ onMounted(() => {
       <Display
         v-if="
           !is_loading &&
-          deviceData.length > 0 &&
-          deviceData.every((obj) => obj.data.length > 0)
+          deviceDataSeries.length > 0 &&
+          deviceDataSeries.every((obj) => obj.data.length > 0)
         "
         :chart-data="deviceData"
+        :chart-series="deviceDataSeries"
         :timestamps="timestamps"
         :display-option="displayFormat"
       ></Display>
       <div
         v-else-if="
           !is_loading &&
-          (deviceData.length === 0 ||
-            deviceData.every((obj) => obj.data.length === 0))
+          (deviceDataSeries.length === 0 ||
+            deviceDataSeries.every((obj) => obj.data.length === 0))
         "
       >
         No Data Available

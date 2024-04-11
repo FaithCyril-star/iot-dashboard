@@ -3,7 +3,11 @@ import VueApexCharts from "vue3-apexcharts";
 import Table from "@/components/dashboard/Table.vue";
 
 const props = defineProps({
-  chartData: {
+  chartData:{
+    type: Array,
+    default: () => [],
+  },
+  chartSeries: {
     type: Array,
     default: () => [],
   },
@@ -17,7 +21,9 @@ const props = defineProps({
   }
 });
 
-const series = ref(props.chartData);
+const series = ref(props.chartSeries);
+const headers = ref(props.chartSeries.map(obj => obj.name));
+headers.value.unshift("Timestamp");
 
 const chartOptions = ref({
   chart: {
@@ -58,9 +64,10 @@ const chartOptions = ref({
       :options="chartOptions"
       :series="series"
     />
-    <Table v-else
-    :chart-data="props.chartData"
-    :timestamps="props.timestamps"
+    <Table 
+    v-else
+    :chart-data="props.chartData"   
+    :headers="headers"
     ></Table>
   </client-only>
 </template>
