@@ -16,11 +16,18 @@ const range = ref({
 const route = useRoute();
 const deviceId = ref(route.params.deviceid);
 const deviceData = ref([]);
+const timestamps = ref([]);
 const is_loading = ref(false)
+const is_heartRateChecked = ref(false)
+const is_temperatureChecked = ref(true)
+const is_oxygenSaturationChecked = ref(false)
+const is_bloodPressureChecked = ref(false)
+
 
 async function getDeviceData() {
   try {
-    is_loading.value = true
+    is_loading.value = true;
+    deviceData.value = [];
     const token = sessionStorage.getItem("token");
     const formattedStartDate = encodeURIComponent(
       format(range.value.start, "yyyy/MM/dd")
@@ -37,13 +44,51 @@ async function getDeviceData() {
     );
     
     is_loading.value = false
-    deviceData.value = res.data.data;
+    if(is_heartRateChecked.value){
+      const heartRateSeries =     {
+      name: "Heart Rate",
+      data: res.data.data.map((obj) => obj.heart_rate),
+    }
+
+      deviceData.value.push(heartRateSeries);
+    }
+    if(is_temperatureChecked.value){
+      const temperatureSeries =   {
+    name: "Temperature",
+    data: res.data.data.map((obj) => obj.temperature),
+    }
+    deviceData.value.push(temperatureSeries);
+    }
+    if(is_oxygenSaturationChecked.value){
+      const oxygenSaturationSeries =  {
+    name: "Oxygen Saturation",
+    data: res.data.data.map((obj) => obj.oxygen_saturation),
+  }
+
+    deviceData.value.push(oxygenSaturationSeries);
+    }
+    if(is_bloodPressureChecked.value){
+      const systolicPressureSeries =   {
+    name: "Systolic Blood Pressure",
+    data: res.data.data.map((obj) => obj.systolic_pressure),
+  }
+      const diastolicPressureSeries =   {
+    name: "Diastolic Blood Pressure",
+    data: res.data.data.map((obj) => obj.diastolic_pressure),
+  }
+
+    deviceData.value.push(systolicPressureSeries);
+    deviceData.value.push(diastolicPressureSeries);
+}
+
+  timestamps.value = res.data.data.map((obj) => obj.timestamp);
+  console.log(deviceData.value);
   } catch (err) {
     console.log(err);
   }
 }
 
-watch(range, () => getDeviceData());
+watch([range, is_bloodPressureChecked, is_heartRateChecked, is_temperatureChecked, is_oxygenSaturationChecked], () => getDeviceData());
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
@@ -90,17 +135,19 @@ onMounted(() => {
     </div>
     <div class="flex flex-col gap-10 w-full h-full">
       <LineChart
-        v-if="!is_loading"
+        v-if="!is_loading && deviceData.length > 0  && deviceData.every(obj => obj.data.length > 0)"
         :chart-data="deviceData"
+        :timestamps="timestamps"
       ></LineChart>
-      <div v-else>No Data Available yet</div>
+      <div v-else-if="!is_loading && (deviceData.length === 0 || deviceData.every(obj => obj.data.length === 0) )">No Data Available</div>
+      <div v-else-if="is_loading">Retrieving Data</div>
       <div class="flex items-center gap-10">
         <div class="flex gap-2 items-center">
           <input
             id="heart_rate"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            :checked="true"
+            v-model="is_heartRateChecked"
           />
           <label
             for="heart_rate"
@@ -113,7 +160,8 @@ onMounted(() => {
             id="oxygen_rate"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
+            v-model="is_oxygenSaturationChecked"
+            />
           <label
             for="oxygen_rate"
             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -125,7 +173,8 @@ onMounted(() => {
             id="blood_pressure"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
+            v-model="is_bloodPressureChecked"          
+            />
           <label
             for="blood_pressure"
             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -137,7 +186,8 @@ onMounted(() => {
             id="temperature"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
+            v-model="is_temperatureChecked"          
+            />
           <label
             for="temperature"
             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"

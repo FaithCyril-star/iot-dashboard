@@ -7,30 +7,13 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  timestamps:{
+    type: Array,
+    default: () => [],
+  }
 });
 
-const series = ref([
-  {
-    name: "Temperature",
-    data: props.chartData.map((obj) => obj.temperature),
-  },
-  {
-    name: "Heart Rate",
-    data: props.chartData.map((obj) => obj.heart_rate),
-  },
-  {
-    name: "Oxygen Saturation",
-    data: props.chartData.map((obj) => obj.oxygen_saturation),
-  },
-  {
-    name: "Systolic Blood Pressure",
-    data: props.chartData.map((obj) => obj.systolic_pressure),
-  },
-  {
-    name: "Diastolic Blood Pressure",
-    data: props.chartData.map((obj) => obj.diastolic_pressure),
-  },
-]);
+const series = ref(props.chartData);
 
 const chartOptions = ref({
   chart: {
@@ -57,10 +40,7 @@ const chartOptions = ref({
     },
   },
   xaxis: {
-    categories: props.chartData.map((obj) => {
-      
-      return obj.timestamp
-    }),
+    categories: props.timestamps,
   },
 });
 </script>
