@@ -2,7 +2,11 @@
 import Navbar from "@/components/dashboard/Navbar.vue";
 import Sidebar from "@/components/dashboard/Sidebar.vue";
 import Content from "@/components/dashboard/Content.vue";
+import { authorized } from "@/utils/authorized.js";
 
+onMounted(() => {
+  authorized();
+});
 </script>
 <template>
   <div class="w-full h-screen overflow-hidden">
