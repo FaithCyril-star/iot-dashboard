@@ -1,6 +1,7 @@
 <script setup>
 import Navbar from "@/components/dashboard/Navbar.vue";
 import Sidebar from "@/components/dashboard/Sidebar.vue";
+import Default from "@/components/dashboard/Default.vue";
 import { authorized } from "@/utils/authorized.js";
 
 onMounted(() => {
@@ -12,8 +13,8 @@ onMounted(() => {
     <Navbar />
     <div class="flex w-full h-full">
       <Sidebar />
-      <div>
-        <p>Hey, click on a device to view its data</p>
+      <div class="flex items-center justify-center w-full">
+        <Default/>
       </div>
     </div>
   </div>

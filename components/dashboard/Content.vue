@@ -19,10 +19,10 @@ const deviceData = ref([]);
 const deviceDataSeries = ref([]);
 const timestamps = ref([]);
 const is_loading = ref(false);
-const is_heartRateChecked = ref(false);
+const is_heartRateChecked = ref(true);
 const is_temperatureChecked = ref(true);
-const is_oxygenSaturationChecked = ref(false);
-const is_bloodPressureChecked = ref(false);
+const is_oxygenSaturationChecked = ref(true);
+const is_bloodPressureChecked = ref(true);
 const displayFormat = ref("graph");
 
 
