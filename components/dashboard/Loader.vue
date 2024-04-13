@@ -10,7 +10,7 @@
   </template>
   
   <script>
-import {FulfillingBouncingCircleSpinner} from 'epic-spinners'
+import {FulfillingBouncingCircleSpinner} from 'epic-spinners';
     export default {
       components: {
         FulfillingBouncingCircleSpinner

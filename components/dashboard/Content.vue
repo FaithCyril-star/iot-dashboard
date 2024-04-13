@@ -5,7 +5,7 @@ import { initFlowbite } from "flowbite";
 import { DatePicker } from "v-calendar";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { format } from "date-fns";
-import axios from "axios";
+import axios from '@/utils/axiosCache.js';
 import { formatDate } from "@/utils/formatDate.js";
 import Display from "@/components/dashboard/Display.vue";
 import Loader from "@/components/dashboard/Loader.vue";
@@ -45,6 +45,9 @@ async function getDeviceData() {
       `https://rpmsbackend.azurewebsites.net/device-data?deviceid=${deviceId.value}&startdate=${formattedStartDate}&enddate=${formattedEndDate}`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        cache: {
+          ttl: 1000 * 60 * 60 // 1 hour
+        }
       }
     );
 

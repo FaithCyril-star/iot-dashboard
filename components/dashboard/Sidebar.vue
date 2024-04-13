@@ -3,7 +3,7 @@
 import { PlusIcon, MinusIcon } from "@heroicons/vue/24/outline";
 import Modal from "@/components/modal/Modal.vue";
 import { initFlowbite } from "flowbite";
-import axios from "axios";
+import axios from '@/utils/axiosCache.js';
 
 // states
 const deviceId = ref("");
@@ -41,6 +41,11 @@ async function removeDevice() {
       `https://rpmsbackend.azurewebsites.net/remove-device?userid=${parseInt(userId)}&deviceid=${deviceId.value}`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        cache: {
+            update: {
+              'get-devices': 'delete'
+            }
+          }
       }
     );
 
@@ -60,8 +65,10 @@ async function getDeviceIds() {
       `https://rpmsbackend.azurewebsites.net/device-ids?userid=${parseInt(userId)}`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        id: 'get-devices'
       }
     );
+
     deviceIds.value = res.data.ids;
   } catch (err) {
     console.log(err);
