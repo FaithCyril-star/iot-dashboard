@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import { formatDate } from "@/utils/formatDate.js";
 import Display from "@/components/dashboard/Display.vue";
+import Loader from "@/components/dashboard/Loader.vue";
 
 const range = ref({
   start: new Date(2024, 3, 4),
@@ -47,7 +48,6 @@ async function getDeviceData() {
       }
     );
 
-    is_loading.value = false;
     deviceData.value = res.data.data;
     if (is_heartRateChecked.value) {
       const heartRateSeries = {
@@ -89,6 +89,8 @@ async function getDeviceData() {
     timestamps.value = res.data.data.map((obj) => formatDate(obj.timestamp));
   } catch (err) {
     console.log(err);
+  }finally{
+    is_loading.value = false;
   }
 }
 
@@ -210,10 +212,11 @@ onMounted(() => {
       >
         No Data Available
       </div>
-      <div v-else-if="is_loading">Retrieving Data</div>
+      <div v-else-if="is_loading" class="flex items-center justify-center h-80"><Loader/></div>
       <div class="flex items-center gap-10">
         <div class="flex gap-2 items-center">
           <input
+            :disabled="is_loading"
             id="heart_rate"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -227,6 +230,7 @@ onMounted(() => {
         </div>
         <div class="flex gap-2 items-center">
           <input
+            :disabled="is_loading"
             id="oxygen_rate"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -240,6 +244,7 @@ onMounted(() => {
         </div>
         <div class="flex gap-2 items-center">
           <input
+            :disabled="is_loading"
             id="blood_pressure"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -253,6 +258,7 @@ onMounted(() => {
         </div>
         <div class="flex gap-2 items-center">
           <input
+            :disabled="is_loading"
             id="temperature"
             type="checkbox"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
