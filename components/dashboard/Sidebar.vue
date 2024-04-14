@@ -1,5 +1,5 @@
 <script setup>
-// import {} from 'heroicons'
+import { useToast } from 'vue-toastification'
 import { PlusIcon, MinusIcon } from "@heroicons/vue/24/outline";
 import Modal from "@/components/modal/Modal.vue";
 import { initFlowbite } from "flowbite";
@@ -8,9 +8,11 @@ import axios from '@/utils/axiosCache.js';
 // states
 const deviceId = ref("");
 const deviceIds = ref([]);
+const toast = useToast();
 
 async function addDevice() {
   try {
+    toast.info("Processing request");
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
 
@@ -25,15 +27,21 @@ async function addDevice() {
       }
     );
 
+    toast.success(res.data);
+
     getDeviceIds();
     deviceId.value = "";
   } catch (err) {
+    toast.error(err.response.data);
+
+    //log error
     console.log(err);
   }
 }
 
 async function removeDevice() {
   try {
+    toast.info("Processing request");
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
 
@@ -49,9 +57,14 @@ async function removeDevice() {
       }
     );
 
+    toast.success(res.data);
+
     getDeviceIds();
     deviceId.value = "";
   } catch (err) {
+    toast.error(err.response.data);
+
+    //log error
     console.log(err);
   }
 }

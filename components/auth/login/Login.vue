@@ -1,10 +1,12 @@
 <script setup>
 import axios from "axios";
+import { useToast } from 'vue-toastification'
 
 // states
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
+const toast = useToast();
 
 async function login(){
   isLoading.value = true; 
@@ -16,16 +18,20 @@ async function login(){
         password: password.value,
       }
     );
+
+    toast.success("Login successful");
+
     // store user info in session
     sessionStorage.setItem("userId", res.data.userId);
     sessionStorage.setItem("username", res.data.username);
     sessionStorage.setItem("token", res.data.token);
 
-    FwbToast.success('Login successful!');
-
     //redirect to dashboard
     await navigateTo("/dashboard");
   } catch (err) {
+    toast.error(err.response.data);
+
+    //log error
     console.log(err);
   }finally {
     isLoading.value = false; 

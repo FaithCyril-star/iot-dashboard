@@ -8,4 +8,5 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  plugins: ['~/plugins/toast.js']
 });

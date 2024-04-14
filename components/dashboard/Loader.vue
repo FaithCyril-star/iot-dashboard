@@ -9,11 +9,11 @@
     </div>
   </template>
   
-  <script>
+<script >
 import {FulfillingBouncingCircleSpinner} from 'epic-spinners';
     export default {
       components: {
         FulfillingBouncingCircleSpinner
       }
     }
-  </script>
+</script>

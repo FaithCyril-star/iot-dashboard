@@ -10,9 +10,10 @@ import { formatDate } from "@/utils/formatDate.js";
 import Display from "@/components/dashboard/Display.vue";
 import Loader from "@/components/dashboard/Loader.vue";
 
+const today = new Date();
 const range = ref({
-  start: new Date(2024, 3, 4),
-  end: new Date(2024, 3, 4),
+  start: today,
+  end: today,
 });
 const route = useRoute();
 const deviceId = ref(route.params.deviceid);
@@ -212,8 +213,9 @@ onMounted(() => {
           (deviceDataSeries.length === 0 ||
             deviceDataSeries.every((obj) => obj.data.length === 0))
         "
+        class="flex items-center justify-center w-full"
       >
-        No Data Available
+      <img src="/nodata.svg" alt="Image of a man infront of a computer screen displaying no data, retrieved from Storyset https://storyset.com/data" class="w-96 h-auto "></img>
       </div>
       <div v-else-if="is_loading" class="flex items-center justify-center h-80"><Loader/></div>
       <div class="flex items-center gap-10">

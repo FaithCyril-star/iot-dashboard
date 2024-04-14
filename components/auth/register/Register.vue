@@ -1,6 +1,6 @@
 <script setup>
-// import { useSessionStorage } from "@vueuse/core";
 import axios from "axios";
+import { useToast } from 'vue-toastification'
 
 // states
 const email = ref("");
@@ -10,11 +10,17 @@ const device_id = ref("");
 const password = ref("");
 const confirm_password = ref("");
 const isLoading = ref(false);
+const toast = useToast();
 
 async function signup() {
+  if(password.value!==confirm_password.value){
+     toast.error("Passwords do not match");
+     return 
+  }
   isLoading.value = true; 
+  let res;
   try {
-    const res = await axios.post(
+    res = await axios.post(
       "https://rpmsbackend.azurewebsites.net/signup/register-user",
       {
         email: email.value,
@@ -25,12 +31,15 @@ async function signup() {
       }
     );
 
+    toast.success(res.data.message);
     // store userId in session
     sessionStorage.setItem("userId", res.data.user_id)
 
     // Redirect to verification page
     await navigateTo("/auth/verify");
   } catch (err) {
+    toast.error(err.response.data);
+
     // Handle errors here
     console.log(err);
   }finally {

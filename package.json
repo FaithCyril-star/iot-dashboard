@@ -30,6 +30,7 @@
     "v-calendar": "^3.1.2",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue3-apexcharts": "^1.5.2"
   },
   "devDependencies": {
