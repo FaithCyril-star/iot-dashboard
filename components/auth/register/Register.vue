@@ -31,14 +31,28 @@ async function signup() {
       }
     );
 
-    toast.success(res.data.message);
+    toast.success("Sign up successful, a verification code has been sent to your email inbox");
     // store userId in session
     sessionStorage.setItem("userId", res.data.user_id)
 
     // Redirect to verification page
     await navigateTo("/auth/verify");
   } catch (err) {
-    toast.error(err.response.data);
+    if(err.response.status === 500){
+      toast.error("Registration unsuccessful due to system error");
+    }
+    else{
+      if(err.response.data === "Unverified email. Please check inbox to verify"){
+        toast.success("Email is unverified, please check inbox for verification code");
+
+        //redirect to verify page
+      await navigateTo("/auth/verify");
+      }
+      else{
+        toast.error(err.response.data);
+      }
+    }
+    
 
     // Handle errors here
     console.log(err);

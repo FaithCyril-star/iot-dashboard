@@ -27,12 +27,17 @@ async function addDevice() {
       }
     );
 
-    toast.success(res.data);
+    toast.success("Device added successfully, pending approval from patient");
 
     getDeviceIds();
     deviceId.value = "";
   } catch (err) {
-    toast.error(err.response.data);
+    if(err.response.status === 500){
+      toast.error("Adding device unsuccessful due to system error");
+    }
+    else{
+      toast.error("Adding device unsuccessful due to invalid device id");
+    }
 
     //log error
     console.log(err);
@@ -57,12 +62,17 @@ async function removeDevice() {
       }
     );
 
-    toast.success(res.data);
+    toast.success("Device removed successfully");
 
     getDeviceIds();
     deviceId.value = "";
   } catch (err) {
-    toast.error(err.response.data);
+    if(err.response.status === 500){
+      toast.error("Removing device unsuccessful due to system error");
+    }
+    else{
+      toast.error("Removing device unsuccessful due to invalid device id");
+    }
 
     //log error
     console.log(err);

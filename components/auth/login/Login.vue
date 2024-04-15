@@ -29,7 +29,12 @@ async function login(){
     //redirect to dashboard
     await navigateTo("/dashboard");
   } catch (err) {
-    toast.error(err.response.data);
+    if(err.response.status === 500){
+      toast.error("Login unsuccessful due to system error");
+    }
+    else{
+        toast.error(err.response.data);
+    }
 
     //log error
     console.log(err);

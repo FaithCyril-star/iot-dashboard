@@ -20,12 +20,22 @@ async function verify() {
         verificationCode: verification_code.value,
       }
     );
-    toast.success(res.data);
+    toast.success("Verification successful");
     
     //redirect to login page
     await navigateTo("/auth/login");
   } catch (err) {
-    toast.error(err.response.data);
+    if(err.response.status === 500){
+      toast.error("Verification unsuccessful due to system error");
+    }
+    else{
+      if(err.response.data === "Please enter a valid verificationCode"){
+        toast.error("Invalid verification code");
+      }
+      else{
+        toast.success("You are already verified");
+      }
+    }
 
     //log error
     console.log(err);
