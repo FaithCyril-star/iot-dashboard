@@ -47,7 +47,7 @@ async function getDeviceData() {
       {
         headers: { Authorization: `Bearer ${token}` },
         cache: {
-          ttl: 1000 * 60 * 60 // 1 hour
+          ttl: 1000 * 60 // 1 minute
         }
       }
     );
