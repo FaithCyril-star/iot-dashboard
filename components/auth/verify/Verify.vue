@@ -9,12 +9,11 @@ const toast = useToast();
 
 async function verify() {
   isLoading.value = true; 
-  let res;
   try {
     // Get userId from session
     const user_id = sessionStorage.getItem("userId");
 
-    res = await axios.post(
+    const res = await axios.post(
       "https://rpmsbackend.azurewebsites.net/signup/verify-code",
       {
         userId: parseInt(user_id),

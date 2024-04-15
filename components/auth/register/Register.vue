@@ -19,9 +19,8 @@ async function signup() {
      return 
   }
   isLoading.value = true; 
-  let res;
   try {
-    res = await axios.post(
+    const res = await axios.post(
       "https://rpmsbackend.azurewebsites.net/signup/register-user",
       {
         email: email.value,
