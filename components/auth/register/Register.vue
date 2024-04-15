@@ -69,6 +69,7 @@ async function signup() {
     <div class="flex items-center justify-center">
       <h1 class="text-2xl font-bold">Register</h1>
     </div>
+    <form @submit.prevent="signup">
     <div class="flex flex-col gap-10">
       <div class="flex items-center gap-5">
         <div>
@@ -82,7 +83,6 @@ async function signup() {
             id="email"
             v-model="email"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="example@email.com"
             required
           />
         </div>
@@ -97,7 +97,6 @@ async function signup() {
             id="username"
             v-model="username"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="John Doe"
             required
           />
         </div>
@@ -113,7 +112,6 @@ async function signup() {
           id="phone_number"
           v-model="phone_number"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="+233244388337"
           required
         />
       </div>
@@ -128,7 +126,6 @@ async function signup() {
           id="device_id"
           v-model="device_id"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="12456787543"
           required
         />
       </div>
@@ -144,7 +141,6 @@ async function signup() {
             id="password"
             v-model="password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="12456787543"
             required
           />
         </div>
@@ -159,7 +155,6 @@ async function signup() {
             id="confirm_password"
             v-model="confirm_password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="12456787543"
             required
           />
         </div>
@@ -175,7 +170,6 @@ async function signup() {
       <div class="flex">
         <button
           :disabled="isLoading"
-          @click="signup"
           class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 w-full p-3 text-gray-50 hover:bg-gray-900/90"
         >
         <div role="status" v-if="isLoading" >
@@ -185,5 +179,6 @@ async function signup() {
         </button>
       </div>
     </div>
+  </form>
   </div>
 </template>

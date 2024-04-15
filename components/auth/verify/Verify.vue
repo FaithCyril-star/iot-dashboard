@@ -52,6 +52,7 @@ async function verify() {
     <div class="flex items-center justify-center">
       <h1 class="text-2xl font-bold">Verify Code</h1>
     </div>
+    <form @submit.prevent="verify">
     <div class="flex flex-col gap-10">
       <div>
         <label
@@ -77,7 +78,6 @@ async function verify() {
       <div class="flex">
         <button
           :disabled="isLoading"
-          @click="verify"
           class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 w-full p-3 text-gray-50 hover:bg-gray-900/90"
         >
         <div role="status" v-if="isLoading" >
@@ -88,5 +88,6 @@ async function verify() {
         </button>
       </div>
     </div>
+  </form>
   </div>
 </template>
