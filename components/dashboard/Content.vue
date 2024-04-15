@@ -10,93 +10,101 @@ import { formatDate } from "@/utils/formatDate.js";
 import Display from "@/components/dashboard/Display.vue";
 import Loader from "@/components/dashboard/Loader.vue";
 
+//reactive states
 const today = new Date();
-const range = ref({
-  start: today,
-  end: today,
-});
+const range = ref({start: today,end: today,});
 const route = useRoute();
 const deviceId = ref(route.params.deviceid);
 const deviceData = ref([]);
 const deviceDataSeries = ref([]);
 const timestamps = ref([]);
 const is_loading = ref(false);
+const displayFormat = ref("graph");
+
+//checkbox states
 const is_heartRateChecked = ref(true);
 const is_temperatureChecked = ref(true);
 const is_oxygenSaturationChecked = ref(true);
 const is_bloodPressureChecked = ref(true);
-const displayFormat = ref("graph");
-
 
 
 async function getDeviceData() {
   try {
     is_loading.value = true;
-    deviceData.value = [];
-    deviceDataSeries.value = [];
+    resetData();
+
     const token = sessionStorage.getItem("token");
-    const formattedStartDate = encodeURIComponent(
-      format(range.value.start, "yyyy/MM/dd")
-    );
-    const formattedEndDate = encodeURIComponent(
-      format(range.value.end, "yyyy/MM/dd")
-    );
+    const formattedStartDate = encodeURIComponent(format(range.value.start, "yyyy/MM/dd"));
+    const formattedEndDate = encodeURIComponent(format(range.value.end, "yyyy/MM/dd"));
 
     const res = await axios.get(
       `https://rpmsbackend.azurewebsites.net/device-data?deviceid=${deviceId.value}&startdate=${formattedStartDate}&enddate=${formattedEndDate}`,
       {
         headers: { Authorization: `Bearer ${token}` },
-        cache: {
-          ttl: 1000 * 60 // 1 minute
-        }
+        cache: {ttl: 1000 * 60} // 1 minute
       }
     );
 
-    deviceData.value = res.data.data;
-    if (is_heartRateChecked.value) {
-      const heartRateSeries = {
-        name: "Heart Rate(bpm)",
-        data: res.data.data.map((obj) => obj.heart_rate),
-      };
-
-      deviceDataSeries.value.push(heartRateSeries);
-    }
-    if (is_temperatureChecked.value) {
-      const temperatureSeries = {
-        name: "Temperature(°C)",
-        data: res.data.data.map((obj) => obj.temperature),
-      };
-      deviceDataSeries.value.push(temperatureSeries);
-    }
-    if (is_oxygenSaturationChecked.value) {
-      const oxygenSaturationSeries = {
-        name: "Oxygen Saturation(%)",
-        data: res.data.data.map((obj) => obj.oxygen_saturation),
-      };
-
-      deviceDataSeries.value.push(oxygenSaturationSeries);
-    }
-    if (is_bloodPressureChecked.value) {
-      const systolicPressureSeries = {
-        name: "Systolic Blood Pressure(mmHg)",
-        data: res.data.data.map((obj) => obj.systolic_pressure),
-      };
-      const diastolicPressureSeries = {
-        name: "Diastolic Blood Pressure(mmHg)",
-        data: res.data.data.map((obj) => obj.diastolic_pressure),
-      };
-
-      deviceDataSeries.value.push(systolicPressureSeries);
-      deviceDataSeries.value.push(diastolicPressureSeries);
-    }
-
-    timestamps.value = res.data.data.map((obj) => formatDate(obj.timestamp));
+    const data = res.data.data;
+    processData(data);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }finally{
     is_loading.value = false;
   }
 }
+
+
+//reset data
+function resetData(){
+  deviceData.value = [];
+  deviceDataSeries.value = [];
+}
+
+
+//process data
+function processData(data){
+  deviceData.value = data;
+    if (is_heartRateChecked.value) {
+      const heartRateSeries = {
+        name: "Heart Rate(bpm)",
+        data: data.map((obj) => obj.heart_rate),
+      };
+      deviceDataSeries.value.push(heartRateSeries);
+    }
+
+    if (is_temperatureChecked.value) {
+      const temperatureSeries = {
+        name: "Temperature(°C)",
+        data: data.map((obj) => obj.temperature),
+      };
+      deviceDataSeries.value.push(temperatureSeries);
+    }
+
+    if (is_oxygenSaturationChecked.value) {
+      const oxygenSaturationSeries = {
+        name: "Oxygen Saturation(%)",
+        data: data.map((obj) => obj.oxygen_saturation),
+      };
+      deviceDataSeries.value.push(oxygenSaturationSeries);
+    }
+
+    if (is_bloodPressureChecked.value) {
+      const systolicPressureSeries = {
+        name: "Systolic Blood Pressure(mmHg)",
+        data: data.map((obj) => obj.systolic_pressure),
+      };
+      const diastolicPressureSeries = {
+        name: "Diastolic Blood Pressure(mmHg)",
+        data: data.map((obj) => obj.diastolic_pressure),
+      };
+      deviceDataSeries.value.push(systolicPressureSeries);
+      deviceDataSeries.value.push(diastolicPressureSeries);
+    }
+
+    timestamps.value = data.map((obj) => formatDate(obj.timestamp));
+}
+
 
 watch(
   [

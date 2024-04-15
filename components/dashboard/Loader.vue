@@ -1,3 +1,11 @@
+<script >
+import {FulfillingBouncingCircleSpinner} from 'epic-spinners';
+    export default {
+      components: {
+        FulfillingBouncingCircleSpinner
+      }
+    }
+</script>
 <template>
     <div id="app">
        <fulfilling-bouncing-circle-spinner
@@ -9,11 +17,3 @@
     </div>
   </template>
   
-<script >
-import {FulfillingBouncingCircleSpinner} from 'epic-spinners';
-    export default {
-      components: {
-        FulfillingBouncingCircleSpinner
-      }
-    }
-</script>
