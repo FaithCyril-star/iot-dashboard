@@ -12,3 +12,4 @@ RUN npm install
 
 # copy the rest of the files to the working directory
 COPY . .
+

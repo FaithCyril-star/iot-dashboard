@@ -86,7 +86,7 @@ async function login(){
         <div class="flex items-center justify-between mt-4">
           <div>
             <NuxtLink to="/auth/register" class="text-blue-500">
-              Forgot Password?
+              Haven't signed up? Click here
             </NuxtLink>
           </div>
         </div>

@@ -15,7 +15,7 @@ methods: {
         const userId = sessionStorage.getItem("userId");
         const token = sessionStorage.getItem("token");
         if(!username && !userId && !token){
-            await navigateTo('/auth/login');
+            await navigateTo('/auth/register');
         }
         else{
             this.$router.push('/dashboard');
