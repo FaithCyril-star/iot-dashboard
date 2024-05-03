@@ -20,7 +20,7 @@ async function verify() {
         verificationCode: verification_code.value,
       }
     );
-    toast.success("Verification successful");
+    toast.success("Verification successful, authorisation email has been sent to device owner");
     
     //redirect to login page
     await navigateTo("/auth/login");

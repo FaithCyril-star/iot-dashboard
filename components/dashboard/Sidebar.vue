@@ -8,6 +8,7 @@ import axios from '@/utils/axiosCache.js';
 // states
 const deviceId = ref("");
 const deviceIds = ref([]);
+const deviceIdToOwnersMap = ref(new Map());
 const toast = useToast();
 
 async function addDevice() {
@@ -29,7 +30,9 @@ async function addDevice() {
 
     toast.success("Device added successfully, pending approval from patient");
 
-    getDeviceIds();
+    //user has to manually refresh
+    // getDeviceIds();
+    // getDeviceOwners();
     deviceId.value = "";
   } catch (err) {
     if(err.response.status === 500){
@@ -63,8 +66,10 @@ async function removeDevice() {
     );
 
     toast.success("Device removed successfully");
-
     getDeviceIds();
+    if(deviceIdToOwnersMap.value.has(deviceId.value)){
+      deviceIdToOwnersMap.value.delete(deviceId.value);
+    }
     deviceId.value = "";
   } catch (err) {
     if(err.response.status === 500){
@@ -78,6 +83,7 @@ async function removeDevice() {
     console.log(err);
   }
 }
+
 
 async function getDeviceIds() {
   try {
@@ -98,9 +104,37 @@ async function getDeviceIds() {
   }
 }
 
-onMounted(() => {
-  getDeviceIds();
+
+async function getDeviceOwners(){
+  const token = sessionStorage.getItem("token");
+
+  deviceIdToOwnersMap.value.clear();
+  try{
+    for(const deviceId of deviceIds.value){
+        const res = await axios.get(
+          `https://rpmsbackend.azurewebsites.net/get-device-patient?deviceid=${deviceId.device_id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+        deviceIdToOwnersMap.value.set(deviceId.device_id,res.data.username);
+      }
+    console.log(deviceIdToOwnersMap.value);
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
+
+onMounted(async () => {
+  await getDeviceIds();
+  await getDeviceOwners();
   initFlowbite();
+});
+
+watch(deviceIds, () => {
+  getDeviceOwners();
 });
 </script>
 <template>
@@ -158,6 +192,10 @@ onMounted(() => {
         v-for="device in deviceIds"
         :key="device"
         class="flex justify-between items-center"
+        v-tooltip="{
+                      content: 'Patient name: ' + deviceIdToOwnersMap.get(device.device_id),
+                      placement: 'right'
+                    }"
       >
         <span>{{ device.device_id }}</span>
       </NuxtLink>

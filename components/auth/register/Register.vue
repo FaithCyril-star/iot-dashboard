@@ -89,7 +89,7 @@ async function signup() {
           <label
             for="username"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Username</label
+            >Full name</label
           >
           <input
             type="text"
