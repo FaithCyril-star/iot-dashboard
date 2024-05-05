@@ -7,9 +7,15 @@ WORKDIR /app
 # copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
+RUN npm install -g npm@10.7.0
+
 # install dependencies
 RUN npm install
 
 # copy the rest of the files to the working directory
 COPY . .
 
+EXPOSE 3000
+
+RUN npm run build
+CMD [ "npm", "run", "start" ]
