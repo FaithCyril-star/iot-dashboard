@@ -1,5 +1,5 @@
 <script setup>
-import { useToast } from 'vue-toastification'
+import * as Toast from "vue-toastification";
 import { PlusIcon, MinusIcon } from "@heroicons/vue/24/outline";
 import Modal from "@/components/modal/Modal.vue";
 import { initFlowbite } from "flowbite";
@@ -9,6 +9,7 @@ import axios from '@/utils/axiosCache.js';
 const deviceId = ref("");
 const deviceIds = ref([]);
 const deviceIdToOwnersMap = ref(new Map());
+const { useToast } = Toast
 const toast = useToast();
 
 async function addDevice() {

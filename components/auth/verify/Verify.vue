@@ -1,10 +1,11 @@
 <script setup>
 import axios from "axios";
-import { useToast } from 'vue-toastification'
+import * as Toast from "vue-toastification";
 import Spinner from "~/components/general/Spinner.vue";
 
 const verification_code = ref("");
 const isLoading = ref(false);
+const { useToast } = Toast;
 const toast = useToast();
 
 async function verify() {

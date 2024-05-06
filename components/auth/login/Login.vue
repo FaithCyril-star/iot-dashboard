@@ -1,12 +1,13 @@
 <script setup>
 import axios from "axios";
-import { useToast } from 'vue-toastification';
+import * as Toast from "vue-toastification";
 import Spinner from "~/components/general/Spinner.vue";
 
 // states
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
+const { useToast } = Toast;
 const toast = useToast();
 
 
