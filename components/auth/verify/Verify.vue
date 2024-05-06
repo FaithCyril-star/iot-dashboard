@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import * as Toast from "vue-toastification";
+import * as Toast from "vue-toastification/dist/index.mjs";
 import Spinner from "~/components/general/Spinner.vue";
 
 const verification_code = ref("");
